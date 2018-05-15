@@ -1,20 +1,6 @@
 import operator
 
 
-def _convert(value):
-    try:
-        return int(value)
-    except ValueError:
-        pass
-
-    try:
-        return float(value)
-    except ValueError:
-        pass
-
-    return value
-
-
 class Calculator(object):
 
     OPERATORS = {
@@ -37,12 +23,3 @@ class Calculator(object):
             self.stack.append(self.OPERATORS[value](a, b))
         else:
             self.stack.append(value)
-
-    def process_string(self, expression):
-        for value in expression.split(' '):
-            self.push(_convert(value))
-
-    def process_file(self, filename):
-        with open(filename) as f:
-            for line in f:
-                self.process_string(line)
