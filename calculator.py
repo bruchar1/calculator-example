@@ -23,3 +23,11 @@ class Calculator(object):
             self.stack.append(self.OPERATORS[value](a, b))
         else:
             self.stack.append(value)
+
+
+if __name__ == '__main__':
+    calc = Calculator()
+    calc.push(1)
+    calc.push(1)
+    calc.push('+')
+    print(calc.pop())
