@@ -41,8 +41,3 @@ class Calculator(object):
     def process_string(self, expression):
         for value in expression.split(' '):
             self.push(_convert(value))
-
-    def process_file(self, filename):
-        with open(filename) as f:
-            for line in f:
-                self.process_string(line)
