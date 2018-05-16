@@ -29,6 +29,14 @@ def _convert(value):
 
 class Calculator(object):
 
+    """
+    >>> calc = Calculator()
+    >>> calc.process_string("1 1 +")
+    >>> calc.pop()
+    2
+
+    """
+
     OPERATORS = {
         "+": operator.add,
         "-": operator.sub,
@@ -53,11 +61,6 @@ class Calculator(object):
     def process_string(self, expression):
         for value in expression.split(' '):
             self.push(_convert(value))
-
-    def process_file(self, filename):
-        with open(filename) as f:
-            for line in f:
-                self.process_string(line)
 
 
 if __name__ == '__main__':
