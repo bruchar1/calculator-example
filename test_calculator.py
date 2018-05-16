@@ -29,3 +29,10 @@ def test_div(calculator):
     calculator.push(2)
     calculator.push('/')
     assert 1 == calculator.pop()
+
+
+def test_div_by_zero(calculator):
+    calculator.push(2)
+    calculator.push(0)
+    with pytest.raises(ZeroDivisionError):
+        calculator.push('/')
