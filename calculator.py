@@ -2,18 +2,6 @@ import operator
 
 
 def _convert(value):
-    """This function converts string to int or float, but keeps operators as string.
-
-    >>> _convert("1")
-    1
-
-    >>> _convert("1.0")
-    1.0
-
-    >>> _convert("+")
-    '+'
-
-    """
     try:
         return int(value)
     except ValueError:
@@ -58,8 +46,3 @@ class Calculator(object):
         with open(filename) as f:
             for line in f:
                 self.process_string(line)
-
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
