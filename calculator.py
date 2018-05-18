@@ -43,11 +43,6 @@ class Calculator(object):
         for value in expression.split(' '):
             self.push(_convert(value))
 
-    def process_file(self, filename):
-        with open(filename) as f:
-            for line in f:
-                self.process_string(line)
-
     @contextmanager
     def recorder(self, record_file):
         original_push = self.push
