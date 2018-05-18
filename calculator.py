@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import operator
 
 
@@ -46,3 +47,16 @@ class Calculator(object):
         with open(filename) as f:
             for line in f:
                 self.process_string(line)
+
+    @contextmanager
+    def recorder(self, record_file):
+        original_push = self.push
+
+        with open(record_file, 'w') as f:
+            def record_push(value):
+                original_push(value)
+                print(value, end=" ", file=f)
+
+            self.push = record_push
+            yield
+            self.push = original_push

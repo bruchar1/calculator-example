@@ -1,3 +1,4 @@
+import os.path
 import pytest
 from calculator import Calculator
 
@@ -39,3 +40,16 @@ def test_div_by_zero(calculator):
     calculator.push(0)
     with pytest.raises(ZeroDivisionError):
         calculator.push('/')
+
+
+def test_record(calculator, tmpdir):
+    operations = "1 1 + 1 + 1 +"
+    record_file = tmpdir.join('record.txt')
+
+    with calculator.recorder(record_file):
+        calculator.process_string(operations)
+    
+    assert os.path.exists(record_file)
+    with open(record_file) as f:
+        saved_record = f.read()
+    assert operations == saved_record.strip()
