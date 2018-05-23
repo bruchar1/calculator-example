@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import os.path
 import pytest
 from calculator import Calculator
@@ -7,32 +8,32 @@ from calculator import Calculator
 def calculator():
     return Calculator()
 
-def test_add(calculator):
-    calculator.push(1)
-    calculator.push(1)
-    calculator.push('+')
-    assert 2 == calculator.pop()
+
+@pytest.mark.parametrize("operations, result", [
+    ("1 1 +", 2),
+    ("1 1 -", 0),
+    ("1 2 *", 2),
+    ("2 2 /", 1)
+])
+def test_process(calculator, operations, result):
+    calculator.process_string(operations)
+    assert result == calculator.pop()
 
 
-def test_sub(calculator):
-    calculator.push(1)
-    calculator.push(1)
-    calculator.push('-')
-    assert 0 == calculator.pop()
+@pytest.fixture(params=[
+    ("1 1 +", 2),
+    ("1 1 -", 0),
+    ("1 2 *", 2),
+    ("2 2 /", 1)
+])
+def process_fixture(calculator, request):
+    operations, result = request.param
+    calculator.process_string(operations)
+    return calculator, result
 
-
-def test_mul(calculator):
-    calculator.push(1)
-    calculator.push(2)
-    calculator.push('*')
-    assert 2 == calculator.pop()
-
-
-def test_div(calculator):
-    calculator.push(2)
-    calculator.push(2)
-    calculator.push('/')
-    assert 1 == calculator.pop()
+def test_operations(process_fixture):
+    calculator, result = process_fixture
+    assert result == calculator.pop()
 
 
 def test_div_by_zero(calculator):
@@ -53,3 +54,14 @@ def test_record(calculator, tmpdir):
     with open(record_file) as f:
         saved_record = f.read()
     assert operations == saved_record.strip()
+
+
+def test_process_file(calculator, monkeypatch):
+    @contextmanager
+    def fake_open(*args, **kwargs):
+        yield ["1 1 +", "2 +"]
+    
+    monkeypatch.setattr(calculator, "_open", fake_open)
+
+    calculator.process_file("filename")
+    assert calculator.pop() == 4

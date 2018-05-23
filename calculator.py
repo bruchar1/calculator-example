@@ -42,9 +42,14 @@ class Calculator(object):
     def process_string(self, expression):
         for value in expression.split(' '):
             self.push(_convert(value))
+    
+    @contextmanager
+    def _open(self, *args, **kwargs):
+        with open(*args, **kwargs) as f:
+            yield f
 
     def process_file(self, filename):
-        with open(filename) as f:
+        with self._open(filename) as f:
             for line in f:
                 self.process_string(line)
 
@@ -52,7 +57,7 @@ class Calculator(object):
     def recorder(self, record_file):
         original_push = self.push
 
-        with open(record_file, 'w') as f:
+        with self._open(record_file, 'w') as f:
             def record_push(value):
                 original_push(value)
                 print(value, end=" ", file=f)
