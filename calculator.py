@@ -29,20 +29,15 @@ class Calculator(object):
         self.stack = []
 
     def pop(self):
-        if not self.stack:
-            return False
         return self.stack.pop()
 
     def push(self, value):
         if value in self.OPERATORS:
             b = self.pop()
             a = self.pop()
-            if a is False or b is False:
-                return False
             self.stack.append(self.OPERATORS[value](a, b))
         else:
             self.stack.append(value)
-        return True
 
     def process_string(self, expression):
         for value in expression.split(' '):
