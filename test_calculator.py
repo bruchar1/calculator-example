@@ -65,3 +65,12 @@ def test_process_file(calculator, monkeypatch):
 
     calculator.process_file("filename")
     assert calculator.pop() == 4
+
+
+def test_process_string(calculator, mocker):
+    push_spy = mocker.spy(calculator, "push")
+    pop_spy = mocker.spy(calculator, "pop")
+
+    calculator.process_string("1 1 +")
+    assert push_spy.call_count == 3
+    assert pop_spy.call_count == 2
